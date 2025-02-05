@@ -1,0 +1,26 @@
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+cookies/
+
+# Environment files
+.env
+.venv/
+*.env
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# chainlit
+.chainlit
