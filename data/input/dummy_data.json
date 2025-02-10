@@ -1,0 +1,10 @@
+[
+    {"question": "How do I reset my password?", "answer": "Go to settings and click reset password."},
+    {"question": "What are the Slack bot commands?", "answer": "Use 'Echo: <message>' or 'Chat: <query>'."},
+    {"question": "How do I invite someone to a Slack channel?", "answer": "Click on the channel name, then select 'Invite people' and enter their email or Slack username."},
+    {"question": "Can I change my Slack display name?", "answer": "Yes, go to your profile settings and edit your display name."},
+    {"question": "How do I schedule a message in Slack?", "answer": "Type your message, then click the small dropdown next to the send button to choose a time to schedule it."},
+    {"question": "What is a Slack workspace?", "answer": "A Slack workspace is a shared hub where teams communicate and collaborate through channels and direct messages."},
+    {"question": "How can I integrate Slack with GitHub?", "answer": "You can use the Slack GitHub app to receive notifications about commits, pull requests, and issues in your Slack channels."},
+    {"question": "Is there a way to delete messages in Slack?", "answer": "Yes, hover over your message, click the three dots, and select 'Delete message' (if your admin allows it)."}
+]
