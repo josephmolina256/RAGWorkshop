@@ -23,7 +23,7 @@ class RAGAgent:
 
         sign = Login(self.__email, self.__password)
         cookies = sign.login()
-        self.chatbot_instance = self._chatbot_instance = hugchat.ChatBot(
+        self.chatbot_instance = hugchat.ChatBot(
                     cookies=cookies.get_dict(),
                     default_llm="meta-llama/Llama-3.3-70B-Instruct"
                 )

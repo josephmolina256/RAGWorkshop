@@ -11,11 +11,10 @@ def load_embedded_qa_data(file_path="data/output/embedded_data.json"):
         with open(file_path, "r") as file:
             qa_embeddings = json.load(file)
 
-        # Convert embeddings back to NumPy arrays
         for item in qa_embeddings:
             item["embedding"] = np.array(item["embedding"])  # Convert list to ndarray
 
-        return qa_embeddings  # Return list of dicts with NumPy embeddings
+        return qa_embeddings
     
     except Exception as e:
         print(f"Error: {e}")
@@ -36,23 +35,22 @@ async def main(message: cl.Message):
             f"Here is some additional context: {additional_context_with_embedding["qa_item"]}\n"
             "Now generate the best response based on this information.\n\n"
         )
+        print(chatbot_input)
     else:
         chatbot_input = (
                     f"User: {message.content}\n"
                 )
     
-    msg = cl.Message(content="")
+    await cl.Message(content=rag_agent.chatbot_instance.chat(chatbot_input).wait_until_done()).send()
+    # msg = cl.Message(content="")
 
-    stream = rag_agent.chatbot_instance.chat(chatbot_input)  # No await
+    # stream = rag_agent.chatbot_instance.chat(chatbot_input)
 
-    for part in stream:
-        # print("Stream part:", part)  # Debug output to see its structure
+    # for part in stream:
+    #     if isinstance(part, dict) and "token" in part:
+    #         token = part["token"]
+    #         await msg.stream_token(token)
 
-        # Try to extract the token based on its actual structure
-        if isinstance(part, dict) and "token" in part:
-            token = part["token"]  # Extract token from dictionary
-            await msg.stream_token(token)  # Send token to Chainlit
-
-    await msg.update()  # Final update
+    # await msg.update()
 
 
