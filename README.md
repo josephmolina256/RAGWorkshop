@@ -11,6 +11,10 @@ So what that really means is that instead of training or tuning your own LLM (wh
 
 
 
+Prerequisites:
+Python
+
+
 Make sure you are in the appropriate directory:
 ex: /c/Users/josep/Documents/RAGWorkshop
 
@@ -25,7 +29,8 @@ Create and activate virtual environment.
 ```
 python -m venv .venv
 source .venv/Scripts/activate 
-#.venv/Scripts/activate.bat for windows
+#.venv/Scripts/activate for powershell or command prompt
+#.venv/Scripts/activate.bat otherwise
 ```
 You should see a little (.venv) tag in your terminal now.
 
