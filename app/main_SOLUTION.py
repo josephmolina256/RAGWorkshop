@@ -1,56 +1,26 @@
-import chainlit as cl
-import numpy as np
-from chatbot.chatbot_SOLUTION import RAGAgent
+import chainlit as cl # https://docs.chainlit.io/get-started/pure-python 
 
-import json
+from chatbot.chatbot import RAGAgent
 
-rag_agent = RAGAgent()
-
-def load_embedded_qa_data(file_path="data/output/embedded_data.json"):
-    try:
-        with open(file_path, "r") as file:
-            qa_embeddings = json.load(file)
-
-        for item in qa_embeddings:
-            item["embedding"] = np.array(item["embedding"])  # Convert list to ndarray
-
-        return qa_embeddings
-    
-    except Exception as e:
-        print(f"Error: {e}")
-        return None  # Failure
-
-qa_embeddings = load_embedded_qa_data()
+chatbot = RAGAgent()
 
 @cl.on_message
-async def main(message: cl.Message):    
-    additional_context_with_embedding = rag_agent.retrieve_similar_question(
-        message.content,
-        qa_embeddings
-    )
+async def main(message: cl.Message):
 
-    if additional_context_with_embedding:
-        chatbot_input = (
-            f"User: {message.content}\n"
-            f"Here is some additional context: {additional_context_with_embedding["qa_item"]}\n"
-            "Now generate the best response based on this information.\n\n"
+    similar_content = chatbot.retrieve_similar_question(message.content)
+
+    if similar_content:
+        input_to_chatbot = (
+            f"Relevant Information: {similar_content}\n"
+            f"User asked: {message.content}\n"
+            f"Now answer the question based on the information provided.\n\n"
         )
-        print(chatbot_input)
-    else:
-        chatbot_input = (
-                    f"User: {message.content}\n"
-                )
-    
-    await cl.Message(content=rag_agent.chatbot_instance.chat(chatbot_input).wait_until_done()).send()
-    # msg = cl.Message(content="")
+    else: 
+        input_to_chatbot = message.content
 
-    # stream = rag_agent.chatbot_instance.chat(chatbot_input)
-
-    # for part in stream:
-    #     if isinstance(part, dict) and "token" in part:
-    #         token = part["token"]
-    #         await msg.stream_token(token)
-
-    # await msg.update()
+    print(input_to_chatbot)
 
 
+    await cl.Message(
+        content=chatbot.chatbot.chat(input_to_chatbot).wait_until_done(),
+    ).send()

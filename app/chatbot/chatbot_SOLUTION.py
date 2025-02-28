@@ -3,48 +3,45 @@ from hugchat.login import Login
 
 from scipy.spatial.distance import cosine
 from sentence_transformers import SentenceTransformer
+import numpy as np
 
 import os
 import json
 from dotenv import load_dotenv
 
+# Reference: https://github.com/Soulter/hugging-chat-api
+# Create account on https://huggingface.co/
+# Login https://huggingface.co/chat/
+
 class RAGAgent:
     def __init__(self):
         """Initialize the HuggingChatWrapper class and load environment variables."""
-        # Load environment variables
-        load_dotenv()
+        # Use dotenv to load environment variables from .env file
+        EMAIL = "INSERT EMAIL" 
+        PASSWD = "INSERT PASSWORD"
 
-        # Fetch environment variables
-        self.__email = os.getenv("HUGGINGFACE_EMAIL")
-        self.__password = os.getenv("HUGGINGFACE_PASSWORD")
+        cookie_path_dir = "./cookies/" # NOTE: trailing slash (/) is required to avoid errors
+        sign = Login(EMAIL, PASSWD)
+        cookies = sign.login(cookie_dir_path=cookie_path_dir, save_cookies=True)
 
-        if not self.__email or not self.__password:
-            raise ValueError("Missing HUGGINGFACE_EMAIL or HUGGINGFACE_PASSWORD in environment variables.")
-
-        sign = Login(self.__email, self.__password)
-        cookies = sign.login()
-        self.chatbot_instance = hugchat.ChatBot(
-                    cookies=cookies.get_dict(),
-                    default_llm="meta-llama/Llama-3.3-70B-Instruct"
-                )
+        self.chatbot = hugchat.ChatBot(cookies=cookies.get_dict())
         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
-        print("initialized NEW RAGAgent")
 
-    def retrieve_similar_question(self, user_query, qa_embeddings, threshold=0.3):
+        with open("data/output/ftp_data.json", "r") as file:
+            self.database = json.load(file)
+
+    def retrieve_similar_question(self, user_query):
         """Finds the most similar question from the stored Q&A pairs and returns the embedding vector value, question, and answer."""
-        user_embedding = self.embedding_model.encode(user_query)
+        input_embedding = self.embedding_model.encode(user_query)
 
         best_match = None
         best_score = float("inf")
-
-        for embedding_item in qa_embeddings:
-            score = cosine(user_embedding, embedding_item["embedding"])
-            if score < best_score:  # Lower cosine distance = higher similarity
+        for data in self.database:
+            score = cosine(input_embedding, np.array(data["embedding"]))
+            print(f"Cosine distance between '{user_query}' and '{data['text']}': {score}")
+            if score < best_score and score < 0.4:
                 best_score = score
-                best_match = embedding_item
-                print(best_score, best_match["qa_item"])
+                best_match = data["text"]
 
-        if best_score < threshold:
-            return best_match
+        return best_match
 
-        return None
