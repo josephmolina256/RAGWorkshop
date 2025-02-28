@@ -21,6 +21,7 @@ So what that really means is that instead of training or tuning your own LLM (wh
 
 -
 
+# Setting Up Your Environment
 
 Make sure you are in the appropriate directory:
 ex: /c/Users/josep/Documents/RAGWorkshop
@@ -47,7 +48,15 @@ Run the following for installation requirements
 pip install -r requirements.txt
 ```
 
+## Test the complete application:
+
 Now run:
+```
+python scripts/embedding/embedding_SOLUTION.py
+```
+You should see a file generate in the data outputs folder called "ftp_data.json"
+
+To run the app, run:
 ```
 chainlit run app/main_SOLUTION.py
 ```
