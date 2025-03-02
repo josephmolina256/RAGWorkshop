@@ -19,9 +19,9 @@ def embed_data(data):
         embedding = embedding_model.encode(data).tolist() 
         database.append({"text": data, "embedding": embedding})
 
-    with open("data/output/ftp_data.json", "w") as file:
+    with open("data/output/ftp_data_SOLUTION.json", "w") as file:
         json.dump(database, file, indent=4)
         
-    print("Data embedded and saved to data/output/ftp_data.json")
+    print("Data embedded and saved to data/output/ftp_data_SOLUTION.json")
 
 embed_data(mock_data)

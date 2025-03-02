@@ -1,6 +1,6 @@
 import chainlit as cl # https://docs.chainlit.io/get-started/pure-python 
 
-from chatbot.chatbot import RAGAgent
+from chatbot.chatbot_SOLUTION import RAGAgent
 
 chatbot = RAGAgent()
 

@@ -16,9 +16,12 @@ from dotenv import load_dotenv
 class RAGAgent:
     def __init__(self):
         """Initialize the HuggingChatWrapper class and load environment variables."""
+        load_dotenv()
+
         # Use dotenv to load environment variables from .env file
-        EMAIL = "INSERT EMAIL" 
-        PASSWD = "INSERT PASSWORD"
+        EMAIL = os.environ.get("HUGGINGFACE_EMAIL") 
+        PASSWD = os.environ.get("HUGGINGFACE_PASSWD")
+
 
         cookie_path_dir = "./cookies/" # NOTE: trailing slash (/) is required to avoid errors
         sign = Login(EMAIL, PASSWD)
@@ -27,7 +30,7 @@ class RAGAgent:
         self.chatbot = hugchat.ChatBot(cookies=cookies.get_dict())
         self.embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
 
-        with open("data/output/ftp_data.json", "r") as file:
+        with open("data/output/ftp_data_SOLUTION.json", "r") as file:
             self.database = json.load(file)
 
     def retrieve_similar_question(self, user_query):
@@ -44,4 +47,13 @@ class RAGAgent:
                 best_match = data["text"]
 
         return best_match
+    
+    def OPTIONAL_login(self, email, password):
+        EMAIL = email 
+        PASSWD = password
 
+        cookie_path_dir = "./cookies/" # NOTE: trailing slash (/) is required to avoid errors
+        sign = Login(EMAIL, PASSWD)
+        cookies = sign.login(cookie_dir_path=cookie_path_dir, save_cookies=True)
+
+        self.chatbot = hugchat.ChatBot(cookies=cookies.get_dict())
