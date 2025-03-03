@@ -42,7 +42,7 @@ class RAGAgent:
         for data in self.database:
             score = cosine(input_embedding, np.array(data["embedding"]))
             print(f"Cosine distance between '{user_query}' and '{data['text']}': {score}")
-            if score < best_score and score < 0.4:
+            if score < best_score and score < 0.6:
                 best_score = score
                 best_match = data["text"]
 
